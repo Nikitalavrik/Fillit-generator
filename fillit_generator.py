@@ -10,10 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
+import sys
 from random import randint, choice
 
-def put_to_file(i, tetraminos):
-	f = open("test", 'a')
+def put_to_file(i, tetraminos, filename):
+	f = open(filename, 'a')
 	if (i != 0):
 		f.write('\n')
 	for i in range(4):
@@ -51,10 +52,21 @@ def clear_file(name):
 def	generate_random_tetraminos(num, filename):
 	clear_file(filename)
 	for i in range(num):
-		put_to_file(i, random_tetraminos())
+		put_to_file(i, random_tetraminos(), filename)
 
-number_of_tetraminos = int(input("\nNumber of tetraminos :  "))
-filename = "test"
-generate_random_tetraminos(number_of_tetraminos, filename)
+filenames = []
+nums_of_tetraminos = []
+for i in range(len(sys.argv)):
+	if (sys.argv[i] == "-o" and i + 1 < len(sys.argv)):
+		filenames.append(sys.argv[i + 1])
+	elif (sys.argv[i] == "-n" and i + 1 < len(sys.argv)):
+		nums_of_tetraminos.append(int(sys.argv[i + 1]))
+
+if (min(len(filenames), len(nums_of_tetraminos)) == 0):
+	print("usage: fillit_generator -o (filename) -n (number of tetraminos)")
+
+for i in range(min(len(filenames), len(nums_of_tetraminos))):
+	generate_random_tetraminos(nums_of_tetraminos[i], filenames[i])
+
 
 
